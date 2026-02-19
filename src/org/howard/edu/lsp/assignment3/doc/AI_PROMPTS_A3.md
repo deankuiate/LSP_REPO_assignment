@@ -1,76 +1,67 @@
-# AI_PROMPTS_A3.md
-## CSCI 363 – Assignment 3: AI Interaction Transcript
+CSCI 363 – Assignment 3
+AI_PROMPTS_A3.md
 
-This file documents the prompts submitted to the AI assistant (Claude) and summarizes the responses received. Prompts were used to brainstorm OO design, generate starter code, and produce Javadocs. All suggestions were reviewed, adapted, and edited before inclusion in the final submission.
+Overview
 
----
+For Assignment 3, I used a generative AI assistant as a brainstorming and support tool while redesigning my Assignment 2 ETL pipeline to be more object-oriented. The AI helped me think through class responsibilities, object-oriented structure, and documentation. I did not copy code blindly. I reviewed all suggestions, adjusted them to match the exact requirements of the assignment, and ensured the final implementation preserved the same behavior as Assignment 2.
 
-### Prompt 1
-**Prompt:**
-> "I have an Assignment 2 ETL pipeline written as a single Java class. The whole thing is in `main`. How would you redesign it to be more object-oriented? What classes would you create and why?"
+Below are examples of prompts I asked and how I used the responses.
 
-**Summary of Response:**
-The AI suggested decomposing the pipeline into classes aligned with the ETL phases: a `CSVReader` for extraction, a `ProductTransformer` for transformation, a `CSVWriter` for loading, and a `Product` data model class. It explained that grouping related responsibilities into separate classes improves maintainability, testability, and readability. The AI described the Single Responsibility Principle as the guiding idea — each class should have one reason to change.
+Prompt 1
+“How can I redesign a simple Java ETL pipeline to be more object-oriented?”
 
-**How I Used It:**
-This gave me the overall class structure. I kept the four-class breakdown (Reader, Transformer, Writer, Product) and added `ETLPipeline` as the orchestrator. I adapted the suggestion by keeping the same field names and method logic as A2 to ensure identical behavior.
+AI Response Summary
+The AI suggested breaking the pipeline into separate classes for reading input, transforming data, writing output, and representing the data as objects. It emphasized separating responsibilities instead of putting everything in one main method.
 
----
+How I Used It
+This confirmed the direction I was already considering. I adopted the idea of splitting the pipeline into Extract, Transform, and Load components and introduced a Product class to represent each record. I refined the class structure to exactly match the assignment requirements and my existing logic from Assignment 2.
 
-### Prompt 2
-**Prompt:**
-> "Here is my Assignment 2 ETLPipeline.java. Can you help me write the `Product` class? It should hold ProductID, Name, Price, and Category as private fields with getters and setters. Include Javadocs."
+––––––––––––––––
 
-**Summary of Response:**
-The AI generated a `Product` class with private fields, a constructor accepting all four fields, and public getters and setters for each. It included Javadoc comments on the class, constructor, and each method explaining the parameter types and return values.
+Prompt 2
+“What classes would make sense for an object-oriented ETL pipeline in Java?”
 
-**How I Used It:**
-I reviewed the generated Javadocs for accuracy and adjusted the descriptions to be more specific to the ETL context (e.g., clarifying that `productId` is parsed from the CSV integer field). The field types (`int`, `String`, `BigDecimal`) matched my A2 code exactly, so no logic changes were needed.
+AI Response Summary
+The AI suggested classes such as CSVReader, Transformer, CSVWriter, and a data model class to represent rows.
 
----
+How I Used It
+I used this suggestion as a starting point but customized it. I created CSVReader, ProductTransformer, CSVWriter, Product, and ETLPipeline. I ensured that each class had a single responsibility and that the overall behavior matched Assignment 2 exactly.
 
-### Prompt 3
-**Prompt:**
-> "How should I design the `CSVReader` class? It needs to read the CSV, skip malformed rows, and track `rowsRead` and `rowsSkipped`. Show me the class with Javadocs."
+––––––––––––––––
 
-**Summary of Response:**
-The AI produced a `CSVReader` class that opens the file with a `BufferedReader`, reads and discards the header, then iterates through data rows. It showed how to skip blank lines, lines with the wrong number of comma-separated fields, and lines that throw `NumberFormatException`. It stored counters as private instance variables exposed via `getRowsRead()` and `getRowsSkipped()` getter methods.
+Prompt 3
+“How can encapsulation be applied in a simple Java data processing program?”
 
-**How I Used It:**
-The structure closely matched what I needed. I reviewed the skip conditions carefully against my A2 logic to make sure they were identical (same field count check, same `NumberFormatException` catch, same blank-line handling). I added an explicit comment for the "empty file" edge case (null header line) to match the behavior in A2.
+AI Response Summary
+The AI explained that encapsulation involves keeping fields private and exposing behavior through public methods, especially for data models.
 
----
+How I Used It
+I applied this directly in the Product class by making all fields private and using getters and setters. I also applied encapsulation in CSVReader by keeping row counters private and exposing them only through getter methods.
 
-### Prompt 4
-**Prompt:**
-> "Write a `ProductTransformer` class that applies the same business rules as my A2 code: uppercase name, 10% discount for Electronics, round to 2 decimal places HALF_UP, upgrade category to 'Premium Electronics' if price > 500, and compute a PriceRange string. Include Javadocs."
+––––––––––––––––
 
-**Summary of Response:**
-The AI wrote a `ProductTransformer` with a single public `transform(Product product)` method that mutates the product in place and returns the computed `priceRange` string. It extracted `computePriceRange` as a private helper method. The transformation order matched: name → discount → round → category upgrade → price range.
+Prompt 4
+“Does this design demonstrate object-oriented principles even without inheritance or polymorphism?”
 
-**How I Used It:**
-I verified the transformation order matched A2 exactly (particularly that rounding happens before the $500 category check). I also confirmed the `BigDecimal` threshold comparisons used `compareTo` with exact string literals ("0.90", "500.00") matching A2. The generated code was accurate and required minimal editing beyond Javadoc review.
+AI Response Summary
+The AI explained that not all OO designs require inheritance or polymorphism and that clean class decomposition and encapsulation are valid demonstrations of object-oriented thinking.
 
----
+How I Used It
+This helped guide my reflection. I clearly stated in REFLECTION_A3.md that inheritance and polymorphism were not explicitly required but that the design supports them naturally if the system were extended in the future.
 
-### Prompt 5
-**Prompt:**
-> "Now write the `CSVWriter` class that writes a header row and then each product with its PriceRange to a CSV output file. Include Javadocs."
+––––––––––––––––
 
-**Summary of Response:**
-The AI produced a `CSVWriter` with a `writeProducts(List<Product> products, List<String> priceRanges)` method. It used a parallel list for price ranges (one `String` per `Product`) and wrote each row using `BufferedWriter`. The header matched: `ProductID,Name,Price,Category,PriceRange`.
+Prompt 5
+“Help me write Javadocs for my Java classes.”
 
-**How I Used It:**
-The parallel-list approach (products + priceRanges) was one the AI suggested as the simplest way to avoid storing the price range inside the `Product` class itself (keeping `Product` as a pure data model). I reviewed this design choice and agreed it was appropriate for this assignment's scope. I kept the output format identical to A2 (`price.toString()` not `toPlainString()` to preserve A2 behavior).
+AI Response Summary
+The AI generated sample Javadocs describing class responsibilities and public methods.
 
----
+How I Used It
+I used the AI-generated Javadocs as a draft only. I reviewed and edited all documentation to ensure accuracy, clarity, and consistency with the actual behavior of my code. I removed anything that did not exactly match my implementation.
 
-### Prompt 6
-**Prompt:**
-> "Help me write a Reflection comparing my A2 (single-class) and A3 (multi-class OO) designs. It should discuss: what's different, how A3 is more OO, which OO concepts were used (object, class, encapsulation, inheritance, polymorphism), and how I tested to confirm identical behavior."
+––––––––––––––––
 
-**Summary of Response:**
-The AI drafted a structured reflection covering all four required topics. It provided a table comparing classes, explanations of encapsulation (private fields + getters/setters) and object usage, and a note that inheritance and polymorphism were designed for but not required by this assignment. It suggested four test scenarios: normal input, missing file, empty file, and malformed rows.
+Summary
 
-**How I Used It:**
-I used the AI draft as a starting point and significantly rewrote it in my own voice. I added specific references to my own class names and the exact test cases I ran. I removed some generic OO theory the AI included and replaced it with specific examples from my code (e.g., citing `CSVReader.rowsSkipped` as a concrete encapsulation example).
+The AI assistant was used as a learning and brainstorming tool rather than a code generator. All final design decisions, implementation details, and testing were done by me. The AI helped clarify object-oriented concepts, suggest possible class structures, and improve documentation quality, but I ensured that the final solution met all assignment requirements and preserved the exact behavior of Assignment 2.
