@@ -13,7 +13,7 @@ import java.util.List;
 public class CSVReader {
 
     /** Path to the input CSV file. */
-    private String inputPath;
+    private final String inputPath;
 
     /** Number of rows that were skipped due to invalid data. */
     private int rowsSkipped;

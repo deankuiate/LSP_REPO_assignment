@@ -47,7 +47,7 @@ public class ETLPipeline {
         ProductTransformer transformer = new ProductTransformer();
         CSVWriter writer             = new CSVWriter(OUTPUT_PATH);
 
-        List<Product> products   = new ArrayList<>();
+        List<Product> products;
         List<String> priceRanges = new ArrayList<>();
 
         // --- EXTRACT ---

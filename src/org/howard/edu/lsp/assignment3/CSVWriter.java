@@ -10,7 +10,7 @@ import java.util.List;
 public class CSVWriter {
 
     /** Path to the output CSV file. */
-    private String outputPath;
+    private final String outputPath;
 
     /**
      * Constructs a CSVWriter for the specified output file path.

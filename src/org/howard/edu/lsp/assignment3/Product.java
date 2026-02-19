@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public class Product {
 
     /** Unique identifier for the product. */
-    private int productId;
+    private final int productId;
 
     /** Name of the product. */
     private String name;
