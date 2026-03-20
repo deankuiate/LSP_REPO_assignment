@@ -1,4 +1,4 @@
-// Dean Kuiate
+// Dean Tekam Kuiate
 package org.howard.edu.lsp.midterm.crccards;
 
 import java.util.ArrayList;
